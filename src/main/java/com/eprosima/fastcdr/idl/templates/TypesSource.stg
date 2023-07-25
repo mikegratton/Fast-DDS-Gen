@@ -1149,37 +1149,6 @@ m__d = $first(member.labels)$;
 $endif$
 >>
 
-unionmember_check_case_list(member, totallabels) ::= <<
-$if(member.default)$
-bool b = true;
-
-switch(m__d)
-{
-    $totallabels:{case $it$:}; separator="\n"$
-    b = false;
-    break;
-    default:
-    break;
-}
-$else$
-bool b = false;
-
-switch(m__d)
-{
-    $member.labels:{case $it$:}; separator="\n"$
-    b = true;
-    break;
-    default:
-    break;
-}
-$endif$
-
-if(!b)
-{
-    throw BadParamException("This member has not been selected");
-}
->>
-
 unionmember_case_selection_se(ctx, member) ::= <<
 $if(member.labels)$
 $member.labels:{ label |case $label$:}; separator="\n"$
