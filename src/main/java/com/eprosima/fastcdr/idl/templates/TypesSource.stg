@@ -461,18 +461,6 @@ bool $union.scopedname$::operator !=(
 void $union.scopedname$::_d(
         $union.discriminator.cppTypename$ __d)
 {
-    bool b = false;
-
-    switch (m__d)
-    {
-        $union.members:{ member | $unionmember_discriminator_case(member=member, totallabels=union.totallabels)$}; separator="\n"$
-    }
-
-    if (!b)
-    {
-        throw BadParamException("Discriminator doesn't correspond with the selected union member");
-    }
-
     m__d = __d;
 }
 
@@ -630,7 +618,15 @@ $member_type_declaration(member)$& $class$::$member.name$()
 >>
 
 public_unionmember_declaration(class, member, totallabels, defaultvalue) ::= <<
-$if(ctx.generateTypesC)$$if(member.typecode.isStringType)$$unionmember_cstring_declaration(class=class, member=member, totallabels=totallabels, defaultvalue=defaultvalue)$$else$$public_unionmember_cpp_declaration(class=class, member=member, totallabels=totallabels, defaultvalue=defaultvalue)$$endif$$else$$public_unionmember_cpp_declaration(class=class, member=member, totallabels=totallabels, defaultvalue=defaultvalue)$$endif$
+$if(ctx.generateTypesC)$
+$if(member.typecode.isStringType)$
+$unionmember_cstring_declaration(class=class, member=member, totallabels=totallabels, defaultvalue=defaultvalue)$
+$else$
+$public_unionmember_cpp_declaration(class=class, member=member, totallabels=totallabels, defaultvalue=defaultvalue)$
+$endif$
+$else$
+$public_unionmember_cpp_declaration(class=class, member=member, totallabels=totallabels, defaultvalue=defaultvalue)$
+$endif$
 >>
 
 unionmember_cstring_declaration(class, member, totallabels, defaultvalue) ::= <<
@@ -662,15 +658,11 @@ void $class$::$member.name$(
 
 $member.typecode.cppTypename$ $class$::$member.name$() const
 {
-    $unionmember_check_case_list(member=member, totallabels=totallabels)$
-
     return m_$member.name$;
 }
 
 $member.typecode.cppTypename$& $class$::$member.name$()
 {
-    $unionmember_check_case_list(member=member, totallabels=totallabels)$
-
     return m_$member.name$;
 }
 $else$
@@ -690,15 +682,11 @@ void $class$::$member.name$(
 
 const $member.typecode.cppTypename$& $class$::$member.name$() const
 {
-    $unionmember_check_case_list(member=member, totallabels=totallabels)$
-
     return m_$member.name$;
 }
 
 $member.typecode.cppTypename$& $class$::$member.name$()
 {
-    $unionmember_check_case_list(member=member, totallabels=totallabels)$
-
     return m_$member.name$;
 }
 $endif$
