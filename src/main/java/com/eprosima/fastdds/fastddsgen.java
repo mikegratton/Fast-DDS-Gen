@@ -850,7 +850,7 @@ public class fastddsgen
                     String fileNameH = output_dir + ctx.getFilename() + "Serialization.h";
                     returnedValue =
                             Utils.writeFile(fileNameH, maintemplates.getTemplate("com/eprosima/fastdds/idl/templates/SerializationHeader.stg"), m_replace);
-                    project.addCommonTestingFile(relative_dir + ctx.getFilename() + "PubSubTypes.cxx");
+                    // project.addCommonTestingFile(relative_dir + ctx.getFilename() + "PubSubTypes.cxx");
 
                     for (String element : project.getFullDependencies())
                     {
@@ -872,6 +872,7 @@ public class fastddsgen
                                     maintemplates.getTemplate("com/eprosima/fastdds/idl/templates/TypesCdrAuxHeaderImpl.stg"), m_replace);
                     }
                 }
+                /*
                 returnedValue &=
                         Utils.writeFile(output_dir + ctx.getFilename() + "PubSubTypes.h",
                             maintemplates.getTemplate("com/eprosima/fastdds/idl/templates/DDSPubSubTypeHeader.stg"), m_replace);
@@ -934,6 +935,7 @@ public class fastddsgen
                         }
                     }
                 }
+                */
             }
 
             // Java support (Java classes and JNI code)

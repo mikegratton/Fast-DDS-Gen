@@ -71,6 +71,7 @@ class Cdr;
 $if(ctx.cdr)$
 class CdrSizeCalculator;
 $endif$
+
 } // namespace fastcdr
 } // namespace eprosima
 
@@ -93,6 +94,9 @@ $endif$
 
 
 $definitions; separator="\n"$
+
+
+#include "$ctx.filename$CdrAux.hpp"
 
 #endif // _FAST_DDS_GENERATED_$ctx.headerGuardName$_H_
 $"\n"$

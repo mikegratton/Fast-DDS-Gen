@@ -37,6 +37,7 @@ namespace fastcdr {
 
 class Cdr;
 class CdrSizeCalculator;
+template <class T> struct CdrTypeProperties;
 
 $definitions; separator="\n"$
 
@@ -85,6 +86,13 @@ eProsima_user_DllExport void serialize_key(
         eprosima::fastcdr::Cdr& scdr,
         const $struct.scopedname$& data);
 
+template <>
+struct CdrTypeProperties<$struct.scopedname$> {
+    static constexpr uint32_t kMaxCdrTypeSize = $struct.cScopedname$_max_cdr_typesize;
+    static constexpr uint32_t kMaxKeyCdrTypeSize = $struct.cScopedname$_max_key_cdr_typesize;
+    static constexpr bool kHasKey = ($struct.cScopedname$_max_key_cdr_typesize == 0);
+    static void serializeKey(Cdr& scdr, $struct.scopedname$& data) { serialize_key(scdr, data); }
+};
 >>
 
 bitset_type(ctx, parent, bitset) ::= <<>>
