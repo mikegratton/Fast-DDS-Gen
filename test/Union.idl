@@ -1,0 +1,49 @@
+module modname {
+
+struct TestStruct
+{
+     unsigned long index;
+     string message;
+};
+
+enum TestEnum {
+    Alpha, Beta
+};
+
+bitset TestBitset
+{
+    bitfield<3> a;
+    bitfield<10> b;
+};
+
+union TestUnion switch(TestEnum) {
+    case Alpha: int32 x;
+    case Beta: double y;
+};
+
+enum Discriminator
+{
+    Int,
+    String,
+    Sequence,
+    Map,
+    Struct,
+    Bitset,
+    Union,
+    Enum,
+    Array
+};
+
+union BigUnion switch(Discriminator) {
+    case Int: int32 myInt;
+    case String: string myString;
+    case Sequence: sequence<TestStruct> mySequence; 
+    case Map: map<int32, TestStruct> myMap;
+    case Struct: TestStruct myStruct;
+    case Bitset: TestBitset myBitset;
+    case Union: TestUnion myUnion;
+    case Enum: TestEnum myEnum;
+    case Array: int32 myArray[4];
+};
+
+}; // module modname

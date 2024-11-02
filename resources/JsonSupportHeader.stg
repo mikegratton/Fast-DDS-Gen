@@ -1,0 +1,153 @@
+// MIT License
+// 
+// Copyright (c) 2024 Michael B. Gratton 
+// 
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal
+// in the Software without restriction, including without limitation the rights
+// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+// copies of the Software, and to permit persons to whom the Software is
+// furnished to do so, subject to the following conditions:
+// 
+// The above copyright notice and this permission notice shall be included in all
+// copies or substantial portions of the Software.
+// 
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+// SOFTWARE.
+
+group JsonSupportHeader;
+
+fromJsonDeclaration(type) ::= <<
+/*!
+ * @brief Create an instance of $type$ from a JSON string.
+ * @throws std::runtime_error on JSON error.
+ */
+$type$ $type$FromJson(std::string const& jsonText);
+
+/*!
+ * @brief Used between different IDL-derived types
+ */
+$type$ $type$FromJson(void const* opaque);
+>>
+
+toJsonDeclaration(type) ::= <<
+/*!
+ * @brief Serialize an instance of $type$ to a JSON string.
+ */
+std::string $type$ToJson($type$ const& sample);
+>>
+
+main(ctx, definitions) ::= <<
+#ifndef _FAST_DDS_GENERATED_$ctx.headerGuardName$_JSON_SUPPORT_H_
+#define _FAST_DDS_GENERATED_$ctx.headerGuardName$_JSON_SUPPORT_H_
+
+#include <string>
+#include "$ctx.filename$.hpp"
+$ctx.directIncludeDependencies : {include | #include "$include$JsonSupport.hpp"}; separator="\n"$
+
+$definitions; separator="\n"$
+
+#endif // _FAST_DDS_GENERATED_$ctx.headerGuardName$_JSON_SUPPORT_H_
+
+>>
+
+module(ctx, parent, module, definition_list) ::= <<
+namespace $module.name$ {
+$definition_list$
+} // namespace $module.name$
+>>
+
+definition_list(definitions) ::= <<
+$definitions; separator="\n\n"$
+>>
+
+struct_type(ctx, parent, struct, member_list) ::= <<
+$fromJsonDeclaration(struct.name)$
+$toJsonDeclaration(struct.name)$
+>>
+
+bitset_type(ctx, parent, bitset) ::= <<
+$fromJsonDeclaration(bitset.name)$
+$toJsonDeclaration(bitset.name)$
+>>
+
+union_type(ctx, parent, union, switch_type) ::= <<
+$fromJsonDeclaration(union.name)$
+$toJsonDeclaration(union.name)$
+>>
+
+enum_type(ctx, parent, enum) ::= <<
+$fromJsonDeclaration(enum.name)$
+$toJsonDeclaration(enum.name)$
+
+/**
+ * @brief Convert a string to the enum value
+ */
+inline $enum.name$ $enum.name$FromString(std::string const& text) { return $enum.name$FromJson(text); }
+
+/**
+ * @brief Convert an enum value to a string
+ */
+inline std::string $enum.name$ToString($enum.name$ const& sample) { return $enum.name$ToJson(sample); }
+>>
+
+
+annotation(ctx, annotation) ::= <<>>
+
+fwd_decl(ctx, parent, type) ::= <<>>
+
+interface(ctx, parent, interface, export_list) ::= <<>>
+
+export_list(exports) ::= <<>>
+
+exception(ctx, parent, exception) ::= <<>>
+
+operation(ctx, parent, operation, param_list) ::= <<>>
+
+param_list(parameters) ::= <<>>
+
+param(parameter) ::= <<>>
+
+const_decl(ctx, parent, const) ::= <<>>
+
+typedef_decl(ctx, parent, typedefs) ::= <<>>
+
+bitmask_type(ctx, parent, bitmask) ::= <<>>
+
+member_type(ctx, member, type_member, declarators) ::= <<
+
+$type_member$
+$declarators$
+
+>>
+
+element_type(ctx, element, type_element, declarator) ::= <<
+
+$type_element$
+$declarator$
+
+>>
+
+sequence_type(ctx, sequence, type_sequence) ::= <<
+
+$type_sequence$
+
+>>
+
+map_type(ctx, map, key_type, value_type) ::= <<
+
+$key_type$
+$value_type$
+
+>>
+
+string_type(ctx, string) ::= <<>>
+
+wide_string_type(ctx, wstring) ::= <<>>
+
+array_declarator(ctx, array) ::= <<>>
