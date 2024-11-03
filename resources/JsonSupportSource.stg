@@ -655,7 +655,7 @@ $bitset.name$ $bitset.name$FromJson(void const* opaque)
 {
     JsonNode const& data = *reinterpret_cast<JsonNode const*>(opaque);
     $bitset.name$ sample;          
-    $bitset.bitfields:{it | $name_access(it)$($json_access(it.name)$.get_primitive<$it.spec.cppTypename$>());}; separator="\n"$
+    $bitset.bitfields:{it | sample.$it.name$ = $json_access(it.name)$.get_primitive<$it.spec.cppTypename$>();}; separator="\n"$
     return sample;
 }
 
@@ -663,8 +663,8 @@ std::string $bitset.name$ToJson($bitset.name$ const& sample)
 {
     std::string json;
     json += "{";    
-    $trunc(bitset.bitfields):{it | $if(!it.annotationNonSerialized)$json += "\"$it.name$\":" + std::to_string(sample.$it.name$()) + ",";$endif$}; separator="\n"$
-    $last(bitset.bitfields):{it | $if(!it.annotationNonSerialized)$json += "\"$it.name$\":" + std::to_string(sample.$it.name$());$endif$}; separator="\n"$
+    $trunc(bitset.bitfields):{it | $if(!it.annotationNonSerialized)$json += "\"$it.name$\":" + std::to_string(sample.$it.name$) + ",";$endif$}; separator="\n"$
+    $last(bitset.bitfields):{it | $if(!it.annotationNonSerialized)$json += "\"$it.name$\":" + std::to_string(sample.$it.name$);$endif$}; separator="\n"$
     json += "}";
     return json;
 }
@@ -674,14 +674,14 @@ std::string $bitset.name$ToJson($bitset.name$ const& sample)
 enum_type(ctx, parent, enum) ::= <<
 $enum.name$ $enum.name$FromJson(std::string const& text)
 {
-    $enum.members : {it | if (text == "$it.name$") return $it.name$;}; separator="\n"$    
+    $enum.members : {it | if (text == "$it.name$") return $enum.name$::$it.name$;}; separator="\n"$    
     throw std::runtime_error("String not recognized as type of enum $enum.name$");
 }
 
 std::string $enum.name$ToJson($enum.name$ const& sample)
 {
     switch(sample) {
-    $enum.members : {it | case $it.name$: return "$it.name$";}; separator="\n"$        
+    $enum.members : {it | case $enum.name$::$it.name$: return "$it.name$";}; separator="\n"$        
     default: throw std::runtime_error("Enum case not recognized as type of enum $enum.name$");
     }    
 }
