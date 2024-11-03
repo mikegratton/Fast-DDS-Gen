@@ -37,6 +37,7 @@ namespace fastcdr {
 
 class Cdr;
 class CdrSizeCalculator;
+template<class T> struct CdrTypeProperties;
 
 $definitions; separator="\n"$
 
@@ -53,5 +54,15 @@ $member_list$
 eProsima_user_DllExport void serialize_key(
         eprosima::fastcdr::Cdr& scdr,
         const $struct.scopedname$& data);
+
+/*!
+ * Type properties used for serialization
+ */
+template<>
+struct CdrTypeProperties<$struct.fullScopedname$> {
+    static constexpr uint32_t kMaxCdrTypeSize = $struct.maxSerializedSize$u;    
+    static constexpr uint32_t kMaxKeyCdrTypeSize = $if(struct.hasKey)$$struct.maxKeySerializedSize$u$else$0u$endif$;
+    static char const* typeName() { return "$struct.fullScopedname$"; }
+};
 
 >>

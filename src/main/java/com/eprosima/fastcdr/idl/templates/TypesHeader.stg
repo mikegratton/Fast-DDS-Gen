@@ -82,6 +82,8 @@ $ctx.directIncludeDependencies : {include | #include "$include$.hpp"}; separator
 
 $definitions; separator="\n"$
 
+#include "$ctx.filename$CdrAux.hpp"
+
 #endif // _FAST_DDS_GENERATED_$ctx.headerGuardName$_HPP_
 $"\n"$
 
@@ -440,33 +442,10 @@ public:
     /*!
      * @brief This function sets the discriminator value.
      * @param __d New value for the discriminator.
-     * @exception eprosima::fastcdr::exception::BadParamException This exception is thrown if the new value doesn't correspond to the selected union member.
      */
     eProsima_user_DllExport void _d(
             $union.discriminator.typecode.cppTypename$ __d)
     {
-        bool valid_discriminator = false;
-
-        switch (__d)
-        {
-            $union.members:{ member |
-            $member.labels:{ label | case $label$:}; separator="\n"$
-            $if(member.default)$
-            default:
-            $endif$
-                if ($member.id$ == selected_member_)
-                {
-                    valid_discriminator = true;
-                \}
-                break;
-            }; separator="\n"$
-        }
-
-        if (!valid_discriminator)
-        {
-            throw eprosima::fastcdr::exception::BadParamException("Discriminator doesn't correspond with the selected union member");
-        }
-
         m__d = __d;
     }
 
