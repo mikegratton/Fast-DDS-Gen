@@ -63,6 +63,7 @@ struct CdrTypeProperties<$struct.fullScopedname$> {
     static constexpr uint32_t kMaxCdrTypeSize = $struct.maxSerializedSize$u;    
     static constexpr uint32_t kMaxKeyCdrTypeSize = $if(struct.hasKey)$$struct.maxKeySerializedSize$u$else$0u$endif$;
     static char const* typeName() { return "$struct.fullScopedname$"; }
+    static void serializeKey(Cdr& scdr, $struct.fullScopedname$ const& data) { serialize_key(scdr, data); }
 };
 
 >>

@@ -2,8 +2,11 @@ module modname {
 
 struct TestStruct
 {
-     unsigned long index;
+     uint64 index;
      string message;
+     sequence<int64> seq;
+     map<int32,int32> amap;
+     int32 adata[3];
 };
 
 enum TestEnum {
